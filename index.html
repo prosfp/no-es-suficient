@@ -1,1244 +1,1659 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ca">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>No és suficient — No al preacord</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>No és suficient — No al preacord</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-  :root {
-    --negre: #0a0a0a;
-    --blanc: #f5f2eb;
-    --vermell: #c8001e;
-    --vermell-fosc: #8a0013;
-    --gris: #3a3a3a;
-    --gris-clar: #d4d0c8;
-    --accent: #e8b400;
-  }
+      :root {
+        --negre: #0a0a0a;
+        --blanc: #f5f2eb;
+        --vermell: #c8001e;
+        --vermell-fosc: #8a0013;
+        --gris: #3a3a3a;
+        --gris-clar: #d4d0c8;
+        --accent: #e8b400;
+      }
 
-  html { scroll-behavior: smooth; }
+      html {
+        scroll-behavior: smooth;
+      }
 
-  body {
-    background: var(--blanc);
-    color: var(--negre);
-    font-family: 'IBM Plex Serif', Georgia, serif;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
+      body {
+        background: var(--blanc);
+        color: var(--negre);
+        font-family: "IBM Plex Serif", Georgia, serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: var(--negre);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 2rem;
-    border-bottom: 3px solid var(--vermell);
-  }
-  .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    color: var(--blanc);
-    letter-spacing: 0.1em;
-  }
-  .nav-logo span { color: var(--vermell); }
-  .nav-links {
-    display: flex;
-    gap: 1.5rem;
-    list-style: none;
-  }
-  .nav-links a {
-    color: var(--gris-clar);
-    text-decoration: none;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--vermell); }
+      /* NAV */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: var(--negre);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 2rem;
+        border-bottom: 3px solid var(--vermell);
+      }
+      .nav-logo {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.4rem;
+        color: var(--blanc);
+        letter-spacing: 0.1em;
+      }
+      .nav-logo span {
+        color: var(--vermell);
+      }
+      .nav-links {
+        display: flex;
+        gap: 1.5rem;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--gris-clar);
+        text-decoration: none;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--vermell);
+      }
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    background: var(--negre);
-    display: grid;
-    grid-template-columns: 1fr;
-    align-items: center;
-    padding: 6rem 2rem 3rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: 'NO';
-    position: absolute;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(20rem, 50vw, 40rem);
-    color: rgba(200,0,30,0.06);
-    right: -5vw;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    line-height: 1;
-    user-select: none;
-  }
-  .hero-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-  .hero-tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--vermell);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .hero-tag::before {
-    content: '';
-    display: block;
-    width: 2rem;
-    height: 2px;
-    background: var(--vermell);
-  }
-  .hero h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(4rem, 12vw, 9rem);
-    color: var(--blanc);
-    line-height: 0.9;
-    letter-spacing: 0.02em;
-    margin-bottom: 1.5rem;
-  }
-  .hero h1 em {
-    color: var(--vermell);
-    font-style: normal;
-    display: block;
-  }
-  .hero-sub {
-    font-size: clamp(1rem, 2.5vw, 1.3rem);
-    color: var(--gris-clar);
-    max-width: 600px;
-    margin-bottom: 3rem;
-    font-style: italic;
-    line-height: 1.7;
-  }
-  .hero-cta {
-    display: inline-block;
-    background: var(--vermell);
-    color: var(--blanc);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 1rem 2rem;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .hero-cta:hover {
-    background: var(--vermell-fosc);
-    transform: translateY(-2px);
-  }
-  .hero-scroll {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    color: var(--gris);
-    text-transform: uppercase;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    animation: bounce 2s infinite;
-  }
-  .hero-scroll::after {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 3rem;
-    background: var(--gris);
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(6px); }
-  }
-
-  /* INTRO */
-  .intro {
-    padding: 5rem 2rem;
-    max-width: 800px;
-    margin: 0 auto;
-    border-left: 4px solid var(--vermell);
-    margin-left: clamp(1rem, 5vw, 8rem);
-  }
-  .intro p {
-    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-    color: var(--gris);
-  }
-  .intro p strong { color: var(--negre); font-weight: 600; }
-  .intro .cita {
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
-    color: var(--negre);
-    font-style: italic;
-    line-height: 1.5;
-    border-top: 2px solid var(--negre);
-    border-bottom: 2px solid var(--negre);
-    padding: 1.5rem 0;
-    margin: 2.5rem 0;
-  }
-
-  /* ARGUMENTS */
-  .arguments {
-    background: var(--negre);
-    padding: 5rem 2rem;
-  }
-  .arguments-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .section-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--vermell);
-    margin-bottom: 3rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .section-label::before {
-    content: '';
-    display: block;
-    width: 2rem;
-    height: 2px;
-    background: var(--vermell);
-  }
-
-  .arg {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 2rem;
-    padding: 3rem 0;
-    border-top: 1px solid #222;
-    align-items: start;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .arg.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .arg-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 5rem;
-    color: var(--vermell);
-    line-height: 1;
-    opacity: 0.5;
-  }
-  .arg-content h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    color: var(--blanc);
-    letter-spacing: 0.03em;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-  }
-  .arg-content p {
-    color: var(--gris-clar);
-    font-size: 0.95rem;
-    line-height: 1.8;
-    margin-bottom: 1rem;
-    max-width: 680px;
-  }
-  .arg-content .pregunta {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--accent);
-    border-left: 3px solid var(--accent);
-    padding: 0.75rem 1rem;
-    margin: 1.5rem 0;
-    background: rgba(232,180,0,0.05);
-    line-height: 1.6;
-  }
-  .arg-content .tesi {
-    font-weight: 600;
-    color: var(--blanc);
-    font-style: italic;
-    font-size: 1rem;
-    margin-top: 1rem;
-  }
-
-  /* GRÀFIC IPC */
-  .grafic-section {
-    padding: 5rem 2rem;
-    background: var(--blanc);
-  }
-  .grafic-inner {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  .grafic-header {
-    margin-bottom: 3rem;
-  }
-  .grafic-header h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: 1;
-    color: var(--negre);
-    margin-bottom: 0.75rem;
-  }
-  .grafic-header h2 em {
-    color: var(--vermell);
-    font-style: normal;
-  }
-  .grafic-header p {
-    color: var(--gris);
-    font-size: 1rem;
-    max-width: 600px;
-    line-height: 1.7;
-  }
-
-  .slider-row {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: var(--negre);
-  }
-  .slider-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--gris-clar);
-    white-space: nowrap;
-  }
-  input[type=range] {
-    flex: 1;
-    -webkit-appearance: none;
-    height: 4px;
-    background: #333;
-    outline: none;
-    cursor: pointer;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    background: var(--vermell);
-    cursor: pointer;
-    border-radius: 0;
-  }
-  .slider-val {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    color: var(--vermell);
-    min-width: 60px;
-    text-align: right;
-  }
-
-  .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1px;
-    background: var(--negre);
-    margin-bottom: 1px;
-  }
-  .metric {
-    background: var(--blanc);
-    padding: 1.5rem;
-  }
-  .metric-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--gris);
-    margin-bottom: 0.5rem;
-  }
-  .metric-val {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    line-height: 1;
-    margin-bottom: 0.25rem;
-  }
-  .metric-val.vermell { color: var(--vermell); }
-  .metric-val.blau { color: #1a5fa5; }
-  .metric-sub {
-    font-size: 0.75rem;
-    color: var(--gris);
-    font-style: italic;
-  }
-
-  .chart-wrap {
-    position: relative;
-    width: 100%;
-    height: 300px;
-    background: var(--blanc);
-    padding: 1.5rem;
-    border: 1px solid var(--gris-clar);
-  }
-  .chart-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
-    color: var(--gris);
-  }
-  .chart-legend span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .leg-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 0;
-    flex-shrink: 0;
-  }
-  .grafic-nota {
-    margin-top: 1rem;
-    padding: 1rem 1.5rem;
-    border-left: 4px solid var(--vermell);
-    font-size: 0.85rem;
-    color: var(--gris);
-    font-style: italic;
-    line-height: 1.7;
-    background: rgba(200,0,30,0.04);
-  }
-
-  /* MINIMS */
-  .minims {
-    background: var(--vermell);
-    padding: 5rem 2rem;
-  }
-  .minims-inner {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  .minims h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.5rem, 6vw, 5rem);
-    color: var(--blanc);
-    line-height: 1;
-    margin-bottom: 3rem;
-    letter-spacing: 0.02em;
-  }
-  .minims-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1px;
-    background: rgba(255,255,255,0.2);
-  }
-  .minim-item {
-    background: var(--vermell);
-    padding: 2rem;
-    transition: background 0.2s;
-  }
-  .minim-item:hover { background: var(--vermell-fosc); }
-  .minim-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 0.15em;
-    margin-bottom: 0.75rem;
-  }
-  .minim-text {
-    font-family: 'IBM Plex Serif', Georgia, serif;
-    font-size: 1.05rem;
-    color: var(--blanc);
-    line-height: 1.5;
-    font-weight: 600;
-  }
-  .minim-desc {
-    font-size: 0.82rem;
-    color: rgba(255,255,255,0.7);
-    margin-top: 0.5rem;
-    line-height: 1.6;
-  }
-
-  /* CONCLUSIO */
-  .conclusio {
-    padding: 6rem 2rem;
-    background: var(--negre);
-    text-align: center;
-  }
-  .conclusio-inner {
-    max-width: 700px;
-    margin: 0 auto;
-  }
-  .conclusio h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3rem, 8vw, 6rem);
-    color: var(--blanc);
-    line-height: 1;
-    margin-bottom: 2rem;
-  }
-  .conclusio h2 em {
-    color: var(--vermell);
-    font-style: normal;
-    display: block;
-  }
-  .conclusio p {
-    color: var(--gris-clar);
-    font-size: 1.05rem;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-    font-style: italic;
-  }
-  .conclusio .final {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    color: var(--accent);
-    letter-spacing: 0.05em;
-    margin-top: 3rem;
-    display: block;
-  }
-
-  /* FOOTER */
-  footer {
-    background: #050505;
-    border-top: 3px solid var(--vermell);
-    padding: 2rem;
-    text-align: center;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    color: #555;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  /* DOTACIONS */
-  .dotacions-section {
-    background: var(--blanc);
-    padding: 5rem 2rem;
-    border-top: 6px solid var(--negre);
-  }
-  .dotacions-inner {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  .dotacions-h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: 1;
-    color: var(--negre);
-    margin-bottom: 1rem;
-  }
-  .dotacions-h2 em {
-    color: var(--vermell);
-    font-style: normal;
-  }
-  .dotacions-intro {
-    font-size: 1rem;
-    color: var(--gris);
-    max-width: 720px;
-    line-height: 1.8;
-    margin-bottom: 3rem;
-  }
-
-  /* TIMELINE */
-  .timeline-wrap {
-    background: var(--negre);
-    padding: 2rem;
-    margin-bottom: 2.5rem;
-  }
-  .timeline-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gris-clar);
-    margin-bottom: 1.5rem;
-  }
-  .timeline-bars { display: flex; flex-direction: column; gap: 0.75rem; }
-  .t-row {
-    display: grid;
-    grid-template-columns: 90px 1fr 40px;
-    align-items: center;
-    gap: 1rem;
-  }
-  .t-row-total { margin-top: 0.5rem; border-top: 1px solid #333; padding-top: 0.75rem; }
-  .t-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--gris-clar);
-    letter-spacing: 0.05em;
-  }
-  .t-row-total .t-label {
-    color: var(--accent);
-    font-weight: 500;
-  }
-  .t-bar-wrap { position: relative; height: 32px; background: #1a1a1a; }
-  .t-bar {
-    height: 100%;
-    background: var(--vermell);
-    display: flex;
-    align-items: center;
-    padding-left: 0.75rem;
-    transition: width 1s ease;
-    position: relative;
-  }
-  .t-bar-total { background: var(--accent); }
-  .t-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    color: var(--blanc);
-    white-space: nowrap;
-  }
-  .t-bar-total .t-num { color: var(--negre); }
-  .t-pct {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    color: #666;
-    text-align: right;
-  }
-  .t-row-total .t-pct { color: var(--accent); }
-
-  /* CONTEXT GRID */
-  .context-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gris);
-    margin-bottom: 1rem;
-  }
-  .context-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1px;
-    background: var(--gris-clar);
-    margin-bottom: 2.5rem;
-  }
-  .ctx-card {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  .ctx-card-base { background: var(--blanc); }
-  .ctx-card-accent { background: #0a0a0a; }
-  .ctx-card-warn { background: #1a0005; }
-  .ctx-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
-  .ctx-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
-    line-height: 1;
-    color: var(--negre);
-  }
-  .ctx-card-accent .ctx-num { color: var(--accent); }
-  .ctx-card-warn .ctx-num { color: var(--vermell); }
-  .ctx-label {
-    font-family: 'IBM Plex Serif', Georgia, serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--negre);
-    line-height: 1.3;
-  }
-  .ctx-card-accent .ctx-label,
-  .ctx-card-warn .ctx-label { color: var(--gris-clar); }
-  .ctx-sub {
-    font-size: 0.72rem;
-    color: var(--gris);
-    line-height: 1.5;
-    font-style: italic;
-  }
-  .ctx-card-accent .ctx-sub,
-  .ctx-card-warn .ctx-sub { color: #666; }
-
-  /* CRÍTICA */
-  .dotacio-critica {
-    border: 2px solid var(--negre);
-    padding: 2rem;
-  }
-  .critica-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    color: var(--vermell);
-    letter-spacing: 0.05em;
-    margin-bottom: 1.5rem;
-  }
-  .critica-items { display: flex; flex-direction: column; gap: 1.25rem; }
-  .critica-item {
-    display: grid;
-    grid-template-columns: 40px 1fr;
-    gap: 1rem;
-    align-items: start;
-  }
-  .critica-i-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    color: var(--gris-clar);
-    line-height: 1;
-  }
-  .critica-i-text {
-    font-size: 0.9rem;
-    color: var(--gris);
-    line-height: 1.7;
-  }
-  .critica-i-text strong { color: var(--negre); }
-
-  /* RESPONSIVE */
-  @media (max-width: 600px) {
-    .arg { grid-template-columns: 50px 1fr; gap: 1rem; }
-    .arg-num { font-size: 3rem; }
-    nav { padding: 0.75rem 1rem; }
-    .nav-links { gap: 1rem; }
-    .nav-links a { font-size: 0.6rem; }
-    .intro { margin-left: 1rem; }
-  }
-
-  /* ANIMATIONS */
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .hero-inner > * {
-    animation: fadeInUp 0.8s ease both;
-  }
-  .hero-tag { animation-delay: 0.1s; }
-  .hero h1 { animation-delay: 0.25s; }
-  .hero-sub { animation-delay: 0.4s; }
-  .hero-cta { animation-delay: 0.55s; }
-</style>
-</head>
-<body>
-
-<nav aria-label="Navegació principal">
-  <div class="nav-logo"><span>No</span> és suficient</div>
-  <ul class="nav-links">
-    <li><a href="#arguments">Arguments</a></li>
-    <li><a href="#grafic">Sou real</a></li>
-    <li><a href="#minims">Mínims</a></li>
-    <li><a href="#dotacions">Dotacions</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section class="hero" aria-labelledby="hero-title">
-  <div class="hero-inner">
-    <p class="hero-tag">Per la Educació PÚBLICA</p>
-    <h1 id="hero-title">
-      No és
-      <em>suficient</em>
-    </h1>
-    <p class="hero-sub">
-      Un acord no és una victòria pel fet d'existir. La pregunta que cal fer-se no és "hem aconseguit alguna cosa?" sinó "hem aconseguit allò que va portar la gent al carrer?"
-    </p>
-    <a href="#arguments" class="hero-cta">Llegeix l'argumentari</a>
-  </div>
-  <div class="hero-scroll" aria-hidden="true">Baixa</div>
-</section>
-
-<!-- INTRO -->
-<section class="intro" aria-label="Introducció">
-  <p>El preacord del 29 de maig és <strong>una concessió parcial dissenyada per comprar pau social</strong>, no una victòria estructural.</p>
-  <p class="cita">"L'administració ha ofert allò que li costa menys i que és més difícil de revertir políticament, mentre blindava allò que realment canviaria l'estructura del poder a les aules."</p>
-  <p>El patró és conegut: mesures visibles però superficials per aturar la pressió, mentre les causes reals del conflicte queden intactes. Signar i anunciar victòria en aquest moment seria <strong>un error estratègic de primer ordre</strong>.</p>
-</section>
-
-<!-- DOTACIONS -->
-<section id="dotacions" class="dotacions" aria-labelledby="dotacions-title">
-  <h2 id="dotacions-title">Dotacions</h2>
-  <p>Les dotacions materials i de personal són fonamentals per garantir una educació pública de qualitat. Cal especificar i garantir:</p>
-  <ul>
-    <li>Augment i estabilitat de la plantilla docent segons ràtios adequades.</li>
-    <li>Invertir en infraestructures i manteniment dels centres.</li>
-    <li>Dotacions per a recursos pedagògics i tecnològics.</li>
-    <li>Suport específic per a alumnat amb necessitats educatives especials.</li>
-  </ul>
-  <p class="nota">Aquest apartat ha d'anar acompanyat d'un calendari i pressupost claus per evitar retallades futures.</p>
-</section>
-
-<!-- ARGUMENTS -->
-<section class="arguments" id="arguments" aria-labelledby="arguments-title">
-  <div class="arguments-inner">
-    <p class="section-label" id="arguments-title">8 raons per dir no</p>
-
-    <article class="arg" aria-label="Argument 1: El sou és una trampa matemàtica">
-      <div class="arg-num" aria-hidden="true">01</div>
-      <div class="arg-content">
-        <h2>El sou és una trampa matemàtica</h2>
-        <p>El complement salarial ofert es consolida gradualment fins al 2029. Però l'acord no inclou cap clàusula de revisió vinculada a l'IPC. Cada any, la inflació erosiona el guany real.</p>
-        <p>Amb una inflació del 3% anual —perfectament normal en el context actual— el poder adquisitiu continuarà caient durant tota la vigència de l'acord. El complement no compensa la pèrdua: la dissimula.</p>
-        <div class="pregunta">Quan se'ns diu que "l'IPC no podia entrar per aquesta mesa sinó per una altra", cal preguntar: qui estava pressionant a l'altra mesa, mentre es negociava aquí? Quan? Amb quins resultats?</div>
-        <p class="tesi">L'administració no ha oblidat la clàusula IPC. Ha decidit no posar-la.</p>
-      </div>
-    </article>
-
-    <article class="arg" aria-label="Argument 2: Les dotacions promeses no són un dret exigible">
-      <div class="arg-num" aria-hidden="true">02</div>
-      <div class="arg-content">
-        <h2>Les dotacions promeses no són un dret exigible</h2>
-        <p>Milers de noves dotacions "previstes durant els pròxims quatre anys" amb disponibilitat pressupostària. Sona bé. Però una dotació prevista condicionada al pressupost no és un dret: és una intenció.</p>
-        <p>Sense concreció de categories, sense distribució territorial i sense garantia pressupostària explícita en una partida dels propers pressupostos, no hi ha res exigible. Si no hi ha mecanisme sancionador per a l'incompliment, l'administració no té cap incentiu real per complir.</p>
-        <div class="pregunta">Quina partida pressupostària concreta garanteix aquestes dotacions? Si no hi ha resposta clara i per escrit, la xifra és propaganda.</div>
-      </div>
-    </article>
-
-    <article class="arg" aria-label="Argument 3: Més places no resolen la precarietat estructural">
-      <div class="arg-num" aria-hidden="true">03</div>
-      <div class="arg-content">
-        <h2>Més places no resolen la precarietat estructural</h2>
-        <p>Afegir dotacions sense millorar les condicions laborals és contractar més persones en la mateixa precarietat. El problema quantitatiu (falten persones) i el problema qualitatiu (condicions, categories, reclassificació) són dos problemes distints.</p>
-        <p>El personal d'atenció educativa, les vetlladores, els monitors de suport, el personal de bressol i lleure: tots continuen en condicions laborals precàries. L'acord afecta principalment el cos docent i deixa fora els col·lectius més vulnerables.</p>
-        <p class="tesi">Resoldre el primer problema no toca el segon. No és una millora estructural: és un pegat.</p>
-      </div>
-    </article>
-
-    <article class="arg" aria-label="Argument 4: No era l'espai per negociar-ho no és una resposta">
-      <div class="arg-num" aria-hidden="true">04</div>
-      <div class="arg-content">
-        <h2>"No era l'espai per negociar-ho" no és una resposta</h2>
-        <p>Un dels arguments que circula per justificar l'acord és que certes reivindicacions —vetlladores, reclassificació del PAE, IPC— "no podien entrar per aquesta mesa" i corresponen a altres espais de negociació.</p>
-        <p>Això pot ser jurídicament cert. Però cal separar dues coses: la descripció tècnica (quin espai és competent) pot ser correcta. La responsabilitat política (qui estava gestionant aquells altres espais simultàniament, amb quina urgència i amb quins resultats) és una qüestió completament diferent.</p>
-        <div class="pregunta">Sobre la internalització de les vetlladores, l'acord recull "un estudi quan acabi la licitació." Sense termini vinculant, sense mecanisme de control, sense conseqüències si no es fa. Una licitació es pot prorrogar indefinidament. Un estudi sense termini no és un compromís.</div>
-        <p class="tesi">Utilitzar l'argument tècnic per eludir la responsabilitat política és una operació de confusió.</p>
-      </div>
-    </article>
-
-    <article class="arg" aria-label="Argument 5: Els decrets que van provocar el conflicte segueixen vigents">
-      <div class="arg-num" aria-hidden="true">05</div>
-      <div class="arg-content">
-        <h2>Els decrets que van provocar el conflicte segueixen vigents</h2>
-        <p>Si el que va generar la mobilització van ser decrets concrets, i cap d'aquests decrets no s'ha derogat, el conflicte original continua existint.</p>
-        <p>Crear "espais de consulta" sobre el currículum no és el mateix que modificar-lo. Crear comissions no és el mateix que canviar les normes.</p>
-        <p class="tesi">L'administració ha après una lliçó eficaç: els espais de participació esgoten l'energia militant sense costar-li res.</p>
-      </div>
-    </article>
-
-    <article class="arg" aria-label="Argument 6: La comissió de seguiment és un mecanisme de control, no de transparència">
-      <div class="arg-num" aria-hidden="true">06</div>
-      <div class="arg-content">
-        <h2>La comissió de seguiment és un mecanisme de control, no de transparència</h2>
-        <p>Un mecanisme de seguiment reservat als sindicats signants de l'acord no és democràcia sindical: és un club tancat. Durant anys, qualsevol reivindicació es podrà desviar cap a "ja s'està treballant a la comissió", sense que la majoria de treballadors pugui verificar-ho ni exigir-ho.</p>
-        <p>Això substitueix la negociació col·lectiva oberta per una gestió tancada. Exclou veus, redueix la transparència i elimina la pressió com a eina.</p>
-        <p class="tesi">No protegeix els treballadors: protegeix l'acord.</p>
-      </div>
-    </article>
-
-    <article class="arg" aria-label="Argument 7: Continuarem lluitant contradiu haver signat">
-      <div class="arg-num" aria-hidden="true">07</div>
-      <div class="arg-content">
-        <h2>"Continuarem lluitant" contradiu haver signat</h2>
-        <p>Si en el moment de signar ja se sabia que certes reivindicacions quedaven fora, cal preguntar-se per quina raó es va signar sense elles.</p>
-        <p>En una negociació sindical, el que no apareix en el text signat no existeix jurídicament. La lluita posterior a un acord és infinitament més difícil: l'administració ja té la pau social que volia, el capital polític de la mobilització s'ha gastat, i els treballadors han rebut el missatge que "s'ha aconseguit".</p>
-        <p class="tesi">Signar i anunciar que es continuarà lluitant per allò que s'ha deixat fora no és una estratègia: és una contradicció.</p>
-      </div>
-    </article>
-
-    <article class="arg" aria-label="Argument 8: La pau social de quatre anys és el premi real de l'administració">
-      <div class="arg-num" aria-hidden="true">08</div>
-      <div class="arg-content">
-        <h2>La pau social de quatre anys és el premi real de l'administració</h2>
-        <p>L'acord té vigència fins al 2029, amb alguns elements fins al 2032. Durant aquest temps, l'administració pot prorrogar licitacions, no desplegar dotacions i no modificar ràtios, sense que hi hagi cap mecanisme de pressió col·lectiva actiu.</p>
-        <p>Quan l'acord acabi, la correlació de forces podrà ser pitjor. La mobilització té un moment de màxima força: és ara.</p>
-        <div class="pregunta">Si acceptem que la mobilització és el que ha produït resultats parcials, llavors la conclusió no pot ser parar. Ha de ser continuar.</div>
-        <p class="tesi">Signar i desmovilitzar trenca la lògica de la pressió en el pitjor moment possible.</p>
-      </div>
-    </article>
-
-  </div>
-</section>
-
-<!-- GRÀFIC -->
-<section class="grafic-section" id="grafic" aria-labelledby="grafic-title">
-  <div class="grafic-inner">
-    <div class="grafic-header">
-      <h2 id="grafic-title">El sou real:<br><em>una pèrdua camuflada</em></h2>
-      <p>Sense clàusula IPC, el complement de 173,30 €/mes que es consolida el 2029 no recupera el poder adquisitiu perdut. Aquí pots calcular-ho tu mateix ajustant la inflació esperada.</p>
-    </div>
-
-    <div class="slider-row">
-      <span class="slider-label">Inflació anual estimada</span>
-      <input type="range" min="1" max="6" step="0.1" value="3" id="ipc-slider" aria-label="Inflació anual en percentatge" />
-      <span class="slider-val" id="ipc-out" aria-live="polite">3,0%</span>
-    </div>
-
-    <div class="metrics-grid" role="region" aria-label="Indicadors de poder adquisitiu">
-      <div class="metric">
-        <div class="metric-label">Pèrdua acumulada (5 anys)</div>
-        <div class="metric-val vermell" id="perdua-abs" aria-live="polite">—</div>
-        <div class="metric-sub">respecte sou just amb IPC</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Sou real preacord (2030)</div>
-        <div class="metric-val blau" id="poder-real" aria-live="polite">—</div>
-        <div class="metric-sub">€/mes en poder adquisitiu</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Sou just amb clàusula IPC</div>
-        <div class="metric-val" id="poder-ipc" aria-live="polite">—</div>
-        <div class="metric-sub">el que correspondria (2030)</div>
-      </div>
-    </div>
-
-    <div class="chart-wrap" style="margin-top:1px;">
-      <div class="chart-legend" aria-hidden="true">
-        <span><span class="leg-dot" style="background:#1a5fa5;"></span>Sou just amb IPC</span>
-        <span><span class="leg-dot" style="background:#c8001e;"></span>Preacord real (sense IPC)</span>
-        <span><span class="leg-dot" style="background:#888; height:2px; width:12px; border-radius:0;"></span>Sou base actual</span>
-      </div>
-      <canvas id="ipc-chart" role="img" aria-label="Gràfic de línies: evolució del sou docent 2026–2030 comparant preacord sense IPC versus sou just amb IPC">
-        Evolució del poder adquisitiu docent 2026–2030. Sense clàusula IPC, el sou real queda per sota del que correspondria amb inflació compensada.
-      </canvas>
-    </div>
-
-   <!-- DOTACIONS INFOGRÀFIC -->
-    <p class="grafic-nota">
-      Salari base de referència: 2.500 €/mes. El complement de 173,30 € es consolida progressivament: 25% el 2027, 50% el 2028, 75% el 2029, 100% el 2030. Sense revisió per IPC, la inflació actua cada any sobre el conjunt del sou.
-    </p>
-  </div>
-</section>
-
- <section class="dotacions-section" id="dotacions" aria-labelledby="dotacions-title">
-  <div class="dotacions-inner">
-
-    <p class="section-label" id="dotacions-title">Les dotacions sota la lupa</p>
-
-    <h2 class="dotacions-h2">6.413 dotacions.<br><em>Per a quants centres?</em></h2>
-    <p class="dotacions-intro">L'acord presenta la xifra de 6.413 noves dotacions com a gran victòria. Per entendre si és gran o petita, cal posar-la en context. Catalunya té aproximadament <strong>3.400 centres públics</strong> d'infantil-primària i secundària. Això vol dir que, al final del desplegament el 2030, la xifra representa menys de 2 dotacions noves per centre, repartides en 4 anys.</p>
-
-    <!-- TIMELINE BAR -->
-    <div class="timeline-wrap" aria-label="Desplegament de dotacions per curs">
-      <div class="timeline-title">Desplegament previst per cursos</div>
-      <div class="timeline-bars">
-        <div class="t-row">
-          <div class="t-label">2026–27</div>
-          <div class="t-bar-wrap">
-            <div class="t-bar" style="width:17%;" data-val="1.088">
-              <span class="t-num">1.088</span>
-            </div>
-          </div>
-          <div class="t-pct">17%</div>
-        </div>
-        <div class="t-row">
-          <div class="t-label">2027–28</div>
-          <div class="t-bar-wrap">
-            <div class="t-bar" style="width:26%;" data-val="1.651">
-              <span class="t-num">1.651</span>
-            </div>
-          </div>
-          <div class="t-pct">26%</div>
-        </div>
-        <div class="t-row">
-          <div class="t-label">2028–29</div>
-          <div class="t-bar-wrap">
-            <div class="t-bar" style="width:26%;" data-val="1.651">
-              <span class="t-num">1.651</span>
-            </div>
-          </div>
-          <div class="t-pct">26%</div>
-        </div>
-        <div class="t-row">
-          <div class="t-label">2029–30</div>
-          <div class="t-bar-wrap">
-            <div class="t-bar t-bar-full" style="width:31.5%;" data-val="2.023">
-              <span class="t-num">2.023</span>
-            </div>
-          </div>
-          <div class="t-pct">31%</div>
-        </div>
-        <div class="t-row t-row-total">
-          <div class="t-label">TOTAL</div>
-          <div class="t-bar-wrap">
-            <div class="t-bar t-bar-total" style="width:100%;">
-              <span class="t-num">6.413</span>
-            </div>
-          </div>
-          <div class="t-pct">100%</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CONTEXT GRID -->
-    <div class="context-title">Posant les xifres en context (curs 2024-2025)</div>
-    <div class="context-grid">
-      <div class="ctx-card ctx-card-base">
-        <div class="ctx-icon">🏫</div>
-        <div class="ctx-num">~3.400</div>
-        <div class="ctx-label">Centres públics a Catalunya</div>
-        <div class="ctx-sub">Infantil-primària i secundària</div>
-      </div>
-      <div class="ctx-card ctx-card-base">
-        <div class="ctx-icon">👩‍🏫</div>
-        <div class="ctx-num">82.277</div>
-        <div class="ctx-label">Dotacions docents actuals</div>
-        <div class="ctx-sub">Font: Departament d'Educació, setembre 2024</div>
-      </div>
-      <div class="ctx-card ctx-card-base">
-        <div class="ctx-icon">🧑‍🤝‍🧑</div>
-        <div class="ctx-num">3.681</div>
-        <div class="ctx-label">Dotacions PAE actuals</div>
-        <div class="ctx-sub">Personal d'atenció educativa</div>
-      </div>
-      <div class="ctx-card ctx-card-accent">
-        <div class="ctx-icon">➕</div>
-        <div class="ctx-num">6.413</div>
-        <div class="ctx-label">Noves dotacions promeses</div>
-        <div class="ctx-sub">En 4 anys. Sense garantia pressupostària concreta</div>
-      </div>
-      <div class="ctx-card ctx-card-warn">
-        <div class="ctx-icon">📍</div>
-        <div class="ctx-num">~1,9</div>
-        <div class="ctx-label">Dotacions noves per centre</div>
-        <div class="ctx-sub">Si es distribuïssin equitativament entre tots els centres</div>
-      </div>
-      <div class="ctx-card ctx-card-warn">
-        <div class="ctx-icon">📅</div>
-        <div class="ctx-num">272</div>
-        <div class="ctx-label">Dotacions per curs al primer any</div>
-        <div class="ctx-sub">1.088 dotacions ÷ 4 trimestres. Menys d'1 per 10 centres</div>
-      </div>
-    </div>
-
-    <!-- CRITICA -->
-    <div class="dotacio-critica">
-      <div class="critica-num">3 raons per no celebrar la xifra</div>
-      <div class="critica-items">
-        <div class="critica-item">
-          <div class="critica-i-num">01</div>
-          <div class="critica-i-text">
-            <strong>Sense concreció de categories.</strong> L'acord no especifica quantes dotacions seran PAE, quantes docents, quantes vetlladores. Una "dotació" pot ser qualsevol cosa. Sense saber-ho, la xifra és una caixa negra.
-          </div>
-        </div>
-        <div class="critica-item">
-          <div class="critica-i-num">02</div>
-          <div class="critica-i-text">
-            <strong>Sense distribució territorial.</strong> Catalunya és molt desigual: centres urbans saturats, centres rurals amb mancances cròniques. Sense mapa territorial, les dotacions poden concentrar-se on ja hi ha més recursos.
-          </div>
-        </div>
-        <div class="critica-item">
-          <div class="critica-i-num">03</div>
-          <div class="critica-i-text">
-            <strong>Disponibilitat pressupostària = condicionat al pressupost.</strong> La frase exacta és clau. Si els pressupostos de la Generalitat no aproven les partides corresponents, les dotacions "previstes" senzillament no es despleguen. No hi ha mecanisme sancionador.
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- MÍNIMS -->
-<section class="minims" id="minims" aria-labelledby="minims-title">
-  <div class="minims-inner">
-    <h2 id="minims-title">Els mínims<br>innegociables</h2>
-    <div class="minims-grid">
-      <div class="minim-item">
-        <div class="minim-num">01</div>
-        <div class="minim-text">Clàusula IPC vinculant</div>
-        <div class="minim-desc">Sense revisió salarial automàtica lligada a la inflació, qualsevol acord salarial és ficció a mig termini.</div>
-      </div>
-      <div class="minim-item">
-        <div class="minim-num">02</div>
-        <div class="minim-text">Derogació dels decrets conflictius</div>
-        <div class="minim-desc">Si els decrets que van provocar la mobilització segueixen vigents, el conflicte original no s'ha resolt.</div>
-      </div>
-      <div class="minim-item">
-        <div class="minim-num">03</div>
-        <div class="minim-text">Internalització de vetlladores amb termini legal</div>
-        <div class="minim-desc">Un "estudi quan acabi la licitació" sense data ni mecanisme de control no és cap compromís real.</div>
-      </div>
-      <div class="minim-item">
-        <div class="minim-num">04</div>
-        <div class="minim-text">Reducció de ràtios immediata</div>
-        <div class="minim-desc">Les aules estan massificades ara. Una reducció que no s'asssolirà fins al 2031–2032 no resol el problema actual.</div>
-      </div>
-      <div class="minim-item">
-        <div class="minim-num">05</div>
-        <div class="minim-text">Garantia pressupostària de les dotacions</div>
-        <div class="minim-desc">Sense partida específica als pressupostos, les dotacions "previstes" no són drets exigibles.</div>
-      </div>
-      <div class="minim-item">
-        <div class="minim-num">06</div>
-        <div class="minim-text">Autonomia real dels claustres</div>
-        <div class="minim-desc">Sense poder de decisió col·lectiu a les escoles i instituts, la resta de millores és cosmètica.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONCLUSIÓ -->
-<section class="conclusio" aria-labelledby="conclusio-title">
-  <div class="conclusio-inner">
-    <h2 id="conclusio-title">
-      El conflicte
-      <em>continua obert</em>
-    </h2>
-    <p>L'acord és un primer "sí" de l'administració, dissenyat per ser suficient per aturar la pressió però insuficient per resoldre els problemes reals.</p>
-    <p>El que s'ha aconseguit és fruit de la mobilització, l'organització i la unitat. Precisament per això no podem parar ara. Signar i desmovilitzar en el moment de màxima força seria regalar a l'administració allò que mai no ha estat capaç de guanyar-nos.</p>
-    <span class="final">La nostra resposta: no és suficient, continuem.</span>
-  </div>
-</section>
-
-<footer>
-  <p>Argumentari d'ús lliure per a assemblees, xarxes i espais de debat sindical en l'educació pública catalana.</p>
-</footer>
-
-<script>
-// --- INTERSECTION OBSERVER per a arguments ---
-const args = document.querySelectorAll('.arg');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      observer.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.15 });
-args.forEach(a => observer.observe(a));
-
-// --- GRÀFIC IPC ---
-const BASE = 2500;
-const COMPLEMENT_FINAL = 173.30;
-const YEARS = [2026, 2027, 2028, 2029, 2030];
-
-function getComplement(yr) {
-  if (yr <= 2026) return 0;
-  if (yr <= 2027) return COMPLEMENT_FINAL * 0.25;
-  if (yr <= 2028) return COMPLEMENT_FINAL * 0.50;
-  if (yr <= 2029) return COMPLEMENT_FINAL * 0.75;
-  return COMPLEMENT_FINAL;
-}
-
-function calcData(ipc) {
-  const withIPC = [], withoutIPC = [], baseLine = [];
-  let baseIPC = BASE;
-  YEARS.forEach((yr, i) => {
-    if (i > 0) baseIPC = baseIPC * (1 + ipc / 100);
-    withIPC.push(Math.round(baseIPC));
-    withoutIPC.push(Math.round(BASE + getComplement(yr)));
-    baseLine.push(BASE);
-  });
-  return { withIPC, withoutIPC, baseLine };
-}
-
-let chart;
-function buildChart(ipc) {
-  const { withIPC, withoutIPC, baseLine } = calcData(ipc);
-  const ctx = document.getElementById('ipc-chart').getContext('2d');
-  if (chart) chart.destroy();
-  chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: YEARS,
-      datasets: [
-        {
-          label: 'Sou just amb IPC',
-          data: withIPC,
-          borderColor: '#1a5fa5',
-          backgroundColor: 'rgba(26,95,165,0.06)',
-          borderWidth: 2.5,
-          pointRadius: 5,
-          pointBackgroundColor: '#1a5fa5',
-          fill: false,
-          tension: 0.3
-        },
-        {
-          label: 'Preacord real',
-          data: withoutIPC,
-          borderColor: '#c8001e',
-          backgroundColor: 'rgba(200,0,30,0.06)',
-          borderWidth: 2.5,
-          pointRadius: 5,
-          pointBackgroundColor: '#c8001e',
-          fill: false,
-          tension: 0.3
-        },
-        {
-          label: 'Sou base',
-          data: baseLine,
-          borderColor: '#aaa',
-          borderWidth: 1,
-          borderDash: [5, 5],
-          pointRadius: 0,
-          fill: false
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        background: var(--negre);
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: center;
+        padding: 6rem 2rem 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "NO";
+        position: absolute;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(20rem, 50vw, 40rem);
+        color: rgba(200, 0, 30, 0.06);
+        right: -5vw;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        line-height: 1;
+        user-select: none;
+      }
+      .hero-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+      .hero-tag {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--vermell);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .hero-tag::before {
+        content: "";
+        display: block;
+        width: 2rem;
+        height: 2px;
+        background: var(--vermell);
+      }
+      .hero h1 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(4rem, 12vw, 9rem);
+        color: var(--blanc);
+        line-height: 0.9;
+        letter-spacing: 0.02em;
+        margin-bottom: 1.5rem;
+      }
+      .hero h1 em {
+        color: var(--vermell);
+        font-style: normal;
+        display: block;
+      }
+      .hero-sub {
+        font-size: clamp(1rem, 2.5vw, 1.3rem);
+        color: var(--gris-clar);
+        max-width: 600px;
+        margin-bottom: 3rem;
+        font-style: italic;
+        line-height: 1.7;
+      }
+      .hero-cta {
+        display: inline-block;
+        background: var(--vermell);
+        color: var(--blanc);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.8rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 1rem 2rem;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+      .hero-cta:hover {
+        background: var(--vermell-fosc);
+        transform: translateY(-2px);
+      }
+      .hero-scroll {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        color: var(--gris);
+        text-transform: uppercase;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        animation: bounce 2s infinite;
+      }
+      .hero-scroll::after {
+        content: "";
+        display: block;
+        width: 1px;
+        height: 3rem;
+        background: var(--gris);
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
         }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#0a0a0a',
-          titleColor: '#f5f2eb',
-          bodyColor: '#d4d0c8',
-          borderColor: '#c8001e',
-          borderWidth: 1,
-          padding: 12,
-          callbacks: {
-            label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.raw.toLocaleString('ca') + ' €/mes'
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: { autoSkip: false, font: { family: 'IBM Plex Mono', size: 11 }, color: '#888' },
-          grid: { color: 'rgba(0,0,0,0.06)' }
-        },
-        y: {
-          min: 2350,
-          max: 2900,
-          ticks: {
-            font: { family: 'IBM Plex Mono', size: 11 },
-            color: '#888',
-            callback: v => v.toLocaleString('ca') + ' €'
-          },
-          grid: { color: 'rgba(0,0,0,0.06)' }
+        50% {
+          transform: translateX(-50%) translateY(6px);
         }
       }
-    }
-  });
-}
 
-function updateMetrics(ipc) {
-  const { withIPC, withoutIPC } = calcData(ipc);
-  let lost = 0;
-  for (let i = 0; i < YEARS.length; i++) {
-    lost += (withIPC[i] - withoutIPC[i]) * 12;
-  }
-  document.getElementById('perdua-abs').textContent = '−' + Math.round(Math.abs(lost)).toLocaleString('ca') + ' €';
-  document.getElementById('poder-real').textContent = withoutIPC[4].toLocaleString('ca') + ' €';
-  document.getElementById('poder-ipc').textContent = withIPC[4].toLocaleString('ca') + ' €';
-}
+      /* INTRO */
+      .intro {
+        padding: 5rem 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+        border-left: 4px solid var(--vermell);
+        margin-left: clamp(1rem, 5vw, 8rem);
+      }
+      .intro p {
+        font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+        color: var(--gris);
+      }
+      .intro p strong {
+        color: var(--negre);
+        font-weight: 600;
+      }
+      .intro .cita {
+        font-size: clamp(1.3rem, 3vw, 1.8rem);
+        color: var(--negre);
+        font-style: italic;
+        line-height: 1.5;
+        border-top: 2px solid var(--negre);
+        border-bottom: 2px solid var(--negre);
+        padding: 1.5rem 0;
+        margin: 2.5rem 0;
+      }
 
-const slider = document.getElementById('ipc-slider');
-const ipcOut = document.getElementById('ipc-out');
+      /* ARGUMENTS */
+      .arguments {
+        background: var(--negre);
+        padding: 5rem 2rem;
+      }
+      .arguments-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--vermell);
+        margin-bottom: 3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .section-label::before {
+        content: "";
+        display: block;
+        width: 2rem;
+        height: 2px;
+        background: var(--vermell);
+      }
 
-function update() {
-  const val = parseFloat(slider.value);
-  ipcOut.textContent = val.toFixed(1).replace('.', ',') + '%';
-  updateMetrics(val);
-  buildChart(val);
-}
-slider.addEventListener('input', update);
-update();
-</script>
-</body>
+      .arg {
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        gap: 2rem;
+        padding: 3rem 0;
+        border-top: 1px solid #222;
+        align-items: start;
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .arg.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .arg-num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 5rem;
+        color: var(--vermell);
+        line-height: 1;
+        opacity: 0.5;
+      }
+      .arg-content h2 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        color: var(--blanc);
+        letter-spacing: 0.03em;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+      }
+      .arg-content p {
+        color: var(--gris-clar);
+        font-size: 0.95rem;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+        max-width: 680px;
+      }
+      .arg-content .pregunta {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.85rem;
+        color: var(--accent);
+        border-left: 3px solid var(--accent);
+        padding: 0.75rem 1rem;
+        margin: 1.5rem 0;
+        background: rgba(232, 180, 0, 0.05);
+        line-height: 1.6;
+      }
+      .arg-content .tesi {
+        font-weight: 600;
+        color: var(--blanc);
+        font-style: italic;
+        font-size: 1rem;
+        margin-top: 1rem;
+      }
+
+      /* GRÀFIC IPC */
+      .grafic-section {
+        padding: 5rem 2rem;
+        background: var(--blanc);
+      }
+      .grafic-inner {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .grafic-header {
+        margin-bottom: 3rem;
+      }
+      .grafic-header h2 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        line-height: 1;
+        color: var(--negre);
+        margin-bottom: 0.75rem;
+      }
+      .grafic-header h2 em {
+        color: var(--vermell);
+        font-style: normal;
+      }
+      .grafic-header p {
+        color: var(--gris);
+        font-size: 1rem;
+        max-width: 600px;
+        line-height: 1.7;
+      }
+
+      .slider-row {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: var(--negre);
+      }
+      .slider-label {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gris-clar);
+        white-space: nowrap;
+      }
+      input[type="range"] {
+        flex: 1;
+        -webkit-appearance: none;
+        height: 4px;
+        background: #333;
+        outline: none;
+        cursor: pointer;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        background: var(--vermell);
+        cursor: pointer;
+        border-radius: 0;
+      }
+      .slider-val {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+        color: var(--vermell);
+        min-width: 60px;
+        text-align: right;
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1px;
+        background: var(--negre);
+        margin-bottom: 1px;
+      }
+      .metric {
+        background: var(--blanc);
+        padding: 1.5rem;
+      }
+      .metric-label {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gris);
+        margin-bottom: 0.5rem;
+      }
+      .metric-val {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2.5rem;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+      }
+      .metric-val.vermell {
+        color: var(--vermell);
+      }
+      .metric-val.blau {
+        color: #1a5fa5;
+      }
+      .metric-sub {
+        font-size: 0.75rem;
+        color: var(--gris);
+        font-style: italic;
+      }
+
+      .chart-wrap {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        background: var(--blanc);
+        padding: 1.5rem;
+        border: 1px solid var(--gris-clar);
+      }
+      .chart-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.05em;
+        color: var(--gris);
+      }
+      .chart-legend span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .leg-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 0;
+        flex-shrink: 0;
+      }
+      .grafic-nota {
+        margin-top: 1rem;
+        padding: 1rem 1.5rem;
+        border-left: 4px solid var(--vermell);
+        font-size: 0.85rem;
+        color: var(--gris);
+        font-style: italic;
+        line-height: 1.7;
+        background: rgba(200, 0, 30, 0.04);
+      }
+
+      /* MINIMS */
+      .minims {
+        background: var(--vermell);
+        padding: 5rem 2rem;
+      }
+      .minims-inner {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .minims h2 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        color: var(--blanc);
+        line-height: 1;
+        margin-bottom: 3rem;
+        letter-spacing: 0.02em;
+      }
+      .minims-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1px;
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .minim-item {
+        background: var(--vermell);
+        padding: 2rem;
+        transition: background 0.2s;
+      }
+      .minim-item:hover {
+        background: var(--vermell-fosc);
+      }
+      .minim-num {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.5);
+        letter-spacing: 0.15em;
+        margin-bottom: 0.75rem;
+      }
+      .minim-text {
+        font-family: "IBM Plex Serif", Georgia, serif;
+        font-size: 1.05rem;
+        color: var(--blanc);
+        line-height: 1.5;
+        font-weight: 600;
+      }
+      .minim-desc {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 0.5rem;
+        line-height: 1.6;
+      }
+
+      /* CONCLUSIO */
+      .conclusio {
+        padding: 6rem 2rem;
+        background: var(--negre);
+        text-align: center;
+      }
+      .conclusio-inner {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .conclusio h2 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(3rem, 8vw, 6rem);
+        color: var(--blanc);
+        line-height: 1;
+        margin-bottom: 2rem;
+      }
+      .conclusio h2 em {
+        color: var(--vermell);
+        font-style: normal;
+        display: block;
+      }
+      .conclusio p {
+        color: var(--gris-clar);
+        font-size: 1.05rem;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+      }
+      .conclusio .final {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        color: var(--accent);
+        letter-spacing: 0.05em;
+        margin-top: 3rem;
+        display: block;
+      }
+
+      /* FOOTER */
+      footer {
+        background: #050505;
+        border-top: 3px solid var(--vermell);
+        padding: 2rem;
+        text-align: center;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.65rem;
+        color: #555;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      /* DOTACIONS */
+      .dotacions-section {
+        background: var(--blanc);
+        padding: 5rem 2rem;
+        border-top: 6px solid var(--negre);
+      }
+      .dotacions-inner {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .dotacions-h2 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        line-height: 1;
+        color: var(--negre);
+        margin-bottom: 1rem;
+      }
+      .dotacions-h2 em {
+        color: var(--vermell);
+        font-style: normal;
+      }
+      .dotacions-intro {
+        font-size: 1rem;
+        color: var(--gris);
+        max-width: 720px;
+        line-height: 1.8;
+        margin-bottom: 3rem;
+      }
+
+      /* TIMELINE */
+      .timeline-wrap {
+        background: var(--negre);
+        padding: 2rem;
+        margin-bottom: 2.5rem;
+      }
+      .timeline-title {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--gris-clar);
+        margin-bottom: 1.5rem;
+      }
+      .timeline-bars {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .t-row {
+        display: grid;
+        grid-template-columns: 90px 1fr 40px;
+        align-items: center;
+        gap: 1rem;
+      }
+      .t-row-total {
+        margin-top: 0.5rem;
+        border-top: 1px solid #333;
+        padding-top: 0.75rem;
+      }
+      .t-label {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--gris-clar);
+        letter-spacing: 0.05em;
+      }
+      .t-row-total .t-label {
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .t-bar-wrap {
+        position: relative;
+        height: 32px;
+        background: #1a1a1a;
+      }
+      .t-bar {
+        height: 100%;
+        background: var(--vermell);
+        display: flex;
+        align-items: center;
+        padding-left: 0.75rem;
+        transition: width 1s ease;
+        position: relative;
+      }
+      .t-bar-total {
+        background: var(--accent);
+      }
+      .t-num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        color: var(--blanc);
+        white-space: nowrap;
+      }
+      .t-bar-total .t-num {
+        color: var(--negre);
+      }
+      .t-pct {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.65rem;
+        color: #666;
+        text-align: right;
+      }
+      .t-row-total .t-pct {
+        color: var(--accent);
+      }
+
+      /* CONTEXT GRID */
+      .context-title {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--gris);
+        margin-bottom: 1rem;
+      }
+      .context-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1px;
+        background: var(--gris-clar);
+        margin-bottom: 2.5rem;
+      }
+      .ctx-card {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+      .ctx-card-base {
+        background: var(--blanc);
+      }
+      .ctx-card-accent {
+        background: #0a0a0a;
+      }
+      .ctx-card-warn {
+        background: #1a0005;
+      }
+      .ctx-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+      }
+      .ctx-num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2.2rem;
+        line-height: 1;
+        color: var(--negre);
+      }
+      .ctx-card-accent .ctx-num {
+        color: var(--accent);
+      }
+      .ctx-card-warn .ctx-num {
+        color: var(--vermell);
+      }
+      .ctx-label {
+        font-family: "IBM Plex Serif", Georgia, serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--negre);
+        line-height: 1.3;
+      }
+      .ctx-card-accent .ctx-label,
+      .ctx-card-warn .ctx-label {
+        color: var(--gris-clar);
+      }
+      .ctx-sub {
+        font-size: 0.72rem;
+        color: var(--gris);
+        line-height: 1.5;
+        font-style: italic;
+      }
+      .ctx-card-accent .ctx-sub,
+      .ctx-card-warn .ctx-sub {
+        color: #666;
+      }
+
+      /* CRÍTICA */
+      .dotacio-critica {
+        border: 2px solid var(--negre);
+        padding: 2rem;
+      }
+      .critica-num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.5rem;
+        color: var(--vermell);
+        letter-spacing: 0.05em;
+        margin-bottom: 1.5rem;
+      }
+      .critica-items {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+      .critica-item {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        gap: 1rem;
+        align-items: start;
+      }
+      .critica-i-num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+        color: var(--gris-clar);
+        line-height: 1;
+      }
+      .critica-i-text {
+        font-size: 0.9rem;
+        color: var(--gris);
+        line-height: 1.7;
+      }
+      .critica-i-text strong {
+        color: var(--negre);
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 600px) {
+        .arg {
+          grid-template-columns: 50px 1fr;
+          gap: 1rem;
+        }
+        .arg-num {
+          font-size: 3rem;
+        }
+        nav {
+          padding: 0.75rem 1rem;
+        }
+        .nav-links {
+          gap: 1rem;
+        }
+        .nav-links a {
+          font-size: 0.6rem;
+        }
+        .intro {
+          margin-left: 1rem;
+        }
+      }
+
+      /* ANIMATIONS */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .hero-inner > * {
+        animation: fadeInUp 0.8s ease both;
+      }
+      .hero-tag {
+        animation-delay: 0.1s;
+      }
+      .hero h1 {
+        animation-delay: 0.25s;
+      }
+      .hero-sub {
+        animation-delay: 0.4s;
+      }
+      .hero-cta {
+        animation-delay: 0.55s;
+      }
+    </style>
+  </head>
+  <body>
+    <nav aria-label="Navegació principal">
+      <div class="nav-logo"><span>No</span> és suficient</div>
+      <ul class="nav-links">
+        <li><a href="#arguments">Arguments</a></li>
+        <li><a href="#grafic">Sou real</a></li>
+        <li><a href="#minims">Mínims</a></li>
+        <li><a href="#dotacions">Dotacions</a></li>
+      </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <p class="hero-tag">Per la Educació PÚBLICA</p>
+        <h1 id="hero-title">
+          No és
+          <em>suficient</em>
+        </h1>
+        <p class="hero-sub">
+          Un acord no és una victòria pel fet d'existir. La pregunta que cal
+          fer-se no és "hem aconseguit alguna cosa?" sinó "hem aconseguit allò
+          que va portar la gent al carrer?"
+        </p>
+        <a href="#arguments" class="hero-cta">Llegeix l'argumentari</a>
+      </div>
+      <div class="hero-scroll" aria-hidden="true">Baixa</div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="intro" aria-label="Introducció">
+      <p>
+        El preacord del 29 de maig és
+        <strong>una concessió parcial dissenyada per comprar pau social</strong
+        >, no una victòria estructural.
+      </p>
+      <p class="cita">
+        "L'administració ha ofert allò que li costa menys i que és més difícil
+        de revertir políticament, mentre blindava allò que realment canviaria
+        l'estructura del poder a les aules."
+      </p>
+      <p>
+        El patró és conegut: mesures visibles però superficials per aturar la
+        pressió, mentre les causes reals del conflicte queden intactes. Signar i
+        anunciar victòria en aquest moment seria
+        <strong>un error estratègic de primer ordre</strong>.
+      </p>
+    </section>
+
+    <!-- DOTACIONS -->
+    <section id="dotacions" class="dotacions" aria-labelledby="dotacions-title">
+      <h2 id="dotacions-title">Dotacions</h2>
+      <p>
+        Les dotacions materials i de personal són fonamentals per garantir una
+        educació pública de qualitat. Cal especificar i garantir:
+      </p>
+      <ul>
+        <li>
+          Augment i estabilitat de la plantilla docent segons ràtios adequades.
+        </li>
+        <li>Invertir en infraestructures i manteniment dels centres.</li>
+        <li>Dotacions per a recursos pedagògics i tecnològics.</li>
+        <li>
+          Suport específic per a alumnat amb necessitats educatives especials.
+        </li>
+      </ul>
+      <p class="nota">
+        Aquest apartat ha d'anar acompanyat d'un calendari i pressupost claus
+        per evitar retallades futures.
+      </p>
+    </section>
+
+    <!-- ARGUMENTS -->
+    <section class="arguments" id="arguments" aria-labelledby="arguments-title">
+      <div class="arguments-inner">
+        <p class="section-label" id="arguments-title">8 raons per dir no</p>
+
+        <article
+          class="arg"
+          aria-label="Argument 1: El sou és una trampa matemàtica"
+        >
+          <div class="arg-num" aria-hidden="true">01</div>
+          <div class="arg-content">
+            <h2>El sou és una trampa matemàtica</h2>
+            <p>
+              El complement salarial ofert es consolida gradualment fins al
+              2029. Però l'acord no inclou cap clàusula de revisió vinculada a
+              l'IPC. Cada any, la inflació erosiona el guany real.
+            </p>
+            <p>
+              Amb una inflació del 3% anual —perfectament normal en el context
+              actual— el poder adquisitiu continuarà caient durant tota la
+              vigència de l'acord. El complement no compensa la pèrdua: la
+              dissimula.
+            </p>
+            <div class="pregunta">
+              Quan se'ns diu que "l'IPC no podia entrar per aquesta mesa sinó
+              per una altra", cal preguntar: qui estava pressionant a l'altra
+              mesa, mentre es negociava aquí? Quan? Amb quins resultats?
+            </div>
+            <p class="tesi">
+              L'administració no ha oblidat la clàusula IPC. Ha decidit no
+              posar-la.
+            </p>
+          </div>
+        </article>
+
+        <article
+          class="arg"
+          aria-label="Argument 2: Les dotacions promeses no són un dret exigible"
+        >
+          <div class="arg-num" aria-hidden="true">02</div>
+          <div class="arg-content">
+            <h2>Les dotacions promeses no són un dret exigible</h2>
+            <p>
+              Milers de noves dotacions "previstes durant els pròxims quatre
+              anys" amb disponibilitat pressupostària. Sona bé. Però una dotació
+              prevista condicionada al pressupost no és un dret: és una
+              intenció.
+            </p>
+            <p>
+              Sense concreció de categories, sense distribució territorial i
+              sense garantia pressupostària explícita en una partida dels
+              propers pressupostos, no hi ha res exigible. Si no hi ha mecanisme
+              sancionador per a l'incompliment, l'administració no té cap
+              incentiu real per complir.
+            </p>
+            <div class="pregunta">
+              Quina partida pressupostària concreta garanteix aquestes
+              dotacions? Si no hi ha resposta clara i per escrit, la xifra és
+              propaganda.
+            </div>
+          </div>
+        </article>
+
+        <article
+          class="arg"
+          aria-label="Argument 3: Més places no resolen la precarietat estructural"
+        >
+          <div class="arg-num" aria-hidden="true">03</div>
+          <div class="arg-content">
+            <h2>Més places no resolen la precarietat estructural</h2>
+            <p>
+              Afegir dotacions sense millorar les condicions laborals és
+              contractar més persones en la mateixa precarietat. El problema
+              quantitatiu (falten persones) i el problema qualitatiu
+              (condicions, categories, reclassificació) són dos problemes
+              distints.
+            </p>
+            <p>
+              El personal d'atenció educativa, les vetlladores, els monitors de
+              suport, el personal de bressol i lleure: tots continuen en
+              condicions laborals precàries. L'acord afecta principalment el cos
+              docent i deixa fora els col·lectius més vulnerables.
+            </p>
+            <p class="tesi">
+              Resoldre el primer problema no toca el segon. No és una millora
+              estructural: és un pegat.
+            </p>
+          </div>
+        </article>
+
+        <article
+          class="arg"
+          aria-label="Argument 4: No era l'espai per negociar-ho no és una resposta"
+        >
+          <div class="arg-num" aria-hidden="true">04</div>
+          <div class="arg-content">
+            <h2>"No era l'espai per negociar-ho" no és una resposta</h2>
+            <p>
+              Un dels arguments que circula per justificar l'acord és que certes
+              reivindicacions —vetlladores, reclassificació del PAE, IPC— "no
+              podien entrar per aquesta mesa" i corresponen a altres espais de
+              negociació.
+            </p>
+            <p>
+              Això pot ser jurídicament cert. Però cal separar dues coses: la
+              descripció tècnica (quin espai és competent) pot ser correcta. La
+              responsabilitat política (qui estava gestionant aquells altres
+              espais simultàniament, amb quina urgència i amb quins resultats)
+              és una qüestió completament diferent.
+            </p>
+            <div class="pregunta">
+              Sobre la internalització de les vetlladores, l'acord recull "un
+              estudi quan acabi la licitació." Sense termini vinculant, sense
+              mecanisme de control, sense conseqüències si no es fa. Una
+              licitació es pot prorrogar indefinidament. Un estudi sense termini
+              no és un compromís.
+            </div>
+            <p class="tesi">
+              Utilitzar l'argument tècnic per eludir la responsabilitat política
+              és una operació de confusió.
+            </p>
+          </div>
+        </article>
+
+        <article
+          class="arg"
+          aria-label="Argument 5: Els decrets que van provocar el conflicte segueixen vigents"
+        >
+          <div class="arg-num" aria-hidden="true">05</div>
+          <div class="arg-content">
+            <h2>Els decrets que van provocar el conflicte segueixen vigents</h2>
+            <p>
+              Si el que va generar la mobilització van ser decrets concrets, i
+              cap d'aquests decrets no s'ha derogat, el conflicte original
+              continua existint.
+            </p>
+            <p>
+              Crear "espais de consulta" sobre el currículum no és el mateix que
+              modificar-lo. Crear comissions no és el mateix que canviar les
+              normes.
+            </p>
+            <p class="tesi">
+              L'administració ha après una lliçó eficaç: els espais de
+              participació esgoten l'energia militant sense costar-li res.
+            </p>
+          </div>
+        </article>
+
+        <article
+          class="arg"
+          aria-label="Argument 6: La comissió de seguiment és un mecanisme de control, no de transparència"
+        >
+          <div class="arg-num" aria-hidden="true">06</div>
+          <div class="arg-content">
+            <h2>
+              La comissió de seguiment és un mecanisme de control, no de
+              transparència
+            </h2>
+            <p>
+              Un mecanisme de seguiment reservat als sindicats signants de
+              l'acord no és democràcia sindical: és un club tancat. Durant anys,
+              qualsevol reivindicació es podrà desviar cap a "ja s'està
+              treballant a la comissió", sense que la majoria de treballadors
+              pugui verificar-ho ni exigir-ho.
+            </p>
+            <p>
+              Això substitueix la negociació col·lectiva oberta per una gestió
+              tancada. Exclou veus, redueix la transparència i elimina la
+              pressió com a eina.
+            </p>
+            <p class="tesi">
+              No protegeix els treballadors: protegeix l'acord.
+            </p>
+          </div>
+        </article>
+
+        <article
+          class="arg"
+          aria-label="Argument 7: Continuarem lluitant contradiu haver signat"
+        >
+          <div class="arg-num" aria-hidden="true">07</div>
+          <div class="arg-content">
+            <h2>"Continuarem lluitant" contradiu haver signat</h2>
+            <p>
+              Si en el moment de signar ja se sabia que certes reivindicacions
+              quedaven fora, cal preguntar-se per quina raó es va signar sense
+              elles.
+            </p>
+            <p>
+              En una negociació sindical, el que no apareix en el text signat no
+              existeix jurídicament. La lluita posterior a un acord és
+              infinitament més difícil: l'administració ja té la pau social que
+              volia, el capital polític de la mobilització s'ha gastat, i els
+              treballadors han rebut el missatge que "s'ha aconseguit".
+            </p>
+            <p class="tesi">
+              Signar i anunciar que es continuarà lluitant per allò que s'ha
+              deixat fora no és una estratègia: és una contradicció.
+            </p>
+          </div>
+        </article>
+
+        <article
+          class="arg"
+          aria-label="Argument 8: La pau social de quatre anys és el premi real de l'administració"
+        >
+          <div class="arg-num" aria-hidden="true">08</div>
+          <div class="arg-content">
+            <h2>
+              La pau social de quatre anys és el premi real de l'administració
+            </h2>
+            <p>
+              L'acord té vigència fins al 2029, amb alguns elements fins al
+              2032. Durant aquest temps, l'administració pot prorrogar
+              licitacions, no desplegar dotacions i no modificar ràtios, sense
+              que hi hagi cap mecanisme de pressió col·lectiva actiu.
+            </p>
+            <p>
+              Quan l'acord acabi, la correlació de forces podrà ser pitjor. La
+              mobilització té un moment de màxima força: és ara.
+            </p>
+            <div class="pregunta">
+              Si acceptem que la mobilització és el que ha produït resultats
+              parcials, llavors la conclusió no pot ser parar. Ha de ser
+              continuar.
+            </div>
+            <p class="tesi">
+              Signar i desmovilitzar trenca la lògica de la pressió en el pitjor
+              moment possible.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- GRÀFIC -->
+    <section class="grafic-section" id="grafic" aria-labelledby="grafic-title">
+      <div class="grafic-inner">
+        <div class="grafic-header">
+          <h2 id="grafic-title">
+            El sou real:<br /><em>una pèrdua camuflada</em>
+          </h2>
+          <p>
+            Sense clàusula IPC, el complement de 173,30 €/mes que es consolida
+            el 2029 no recupera el poder adquisitiu perdut. Aquí pots
+            calcular-ho tu mateix ajustant la inflació esperada.
+          </p>
+        </div>
+
+        <div class="slider-row">
+          <span class="slider-label">Inflació anual estimada</span>
+          <input
+            type="range"
+            min="1"
+            max="6"
+            step="0.1"
+            value="3"
+            id="ipc-slider"
+            aria-label="Inflació anual en percentatge"
+          />
+          <span class="slider-val" id="ipc-out" aria-live="polite">3,0%</span>
+        </div>
+
+        <div
+          class="metrics-grid"
+          role="region"
+          aria-label="Indicadors de poder adquisitiu"
+        >
+          <div class="metric">
+            <div class="metric-label">Pèrdua acumulada (5 anys)</div>
+            <div class="metric-val vermell" id="perdua-abs" aria-live="polite">
+              —
+            </div>
+            <div class="metric-sub">respecte sou just amb IPC</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Sou real preacord (2030)</div>
+            <div class="metric-val blau" id="poder-real" aria-live="polite">
+              —
+            </div>
+            <div class="metric-sub">€/mes en poder adquisitiu</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Sou just amb clàusula IPC</div>
+            <div class="metric-val" id="poder-ipc" aria-live="polite">—</div>
+            <div class="metric-sub">el que correspondria (2030)</div>
+          </div>
+        </div>
+
+        <div class="chart-wrap" style="margin-top: 1px">
+          <div class="chart-legend" aria-hidden="true">
+            <span
+              ><span class="leg-dot" style="background: #1a5fa5"></span>Sou just
+              amb IPC</span
+            >
+            <span
+              ><span class="leg-dot" style="background: #c8001e"></span>Preacord
+              real (sense IPC)</span
+            >
+            <span
+              ><span
+                class="leg-dot"
+                style="
+                  background: #888;
+                  height: 2px;
+                  width: 12px;
+                  border-radius: 0;
+                "
+              ></span
+              >Sou base actual</span
+            >
+          </div>
+          <canvas
+            id="ipc-chart"
+            role="img"
+            aria-label="Gràfic de línies: evolució del sou docent 2026–2030 comparant preacord sense IPC versus sou just amb IPC"
+          >
+            Evolució del poder adquisitiu docent 2026–2030. Sense clàusula IPC,
+            el sou real queda per sota del que correspondria amb inflació
+            compensada.
+          </canvas>
+        </div>
+
+        <!-- DOTACIONS INFOGRÀFIC -->
+        <p class="grafic-nota">
+          Salari base de referència: 2.500 €/mes. El complement de 173,30 € es
+          consolida progressivament: 25% el 2027, 50% el 2028, 75% el 2029, 100%
+          el 2030. Sense revisió per IPC, la inflació actua cada any sobre el
+          conjunt del sou.
+        </p>
+      </div>
+    </section>
+
+    <section
+      class="dotacions-section"
+      id="dotacions"
+      aria-labelledby="dotacions-title"
+    >
+      <div class="dotacions-inner">
+        <p class="section-label" id="dotacions-title">
+          Les dotacions sota la lupa
+        </p>
+
+        <h2 class="dotacions-h2">
+          6.413 dotacions.<br /><em>Per a quants centres?</em>
+        </h2>
+        <p class="dotacions-intro">
+          L'acord presenta la xifra de 6.413 noves dotacions com a gran
+          victòria. Per entendre si és gran o petita, cal posar-la en context.
+          Catalunya té aproximadament
+          <strong>3.400 centres públics</strong> d'infantil-primària i
+          secundària. Això vol dir que, al final del desplegament el 2030, la
+          xifra representa menys de 2 dotacions noves per centre, repartides en
+          4 anys.
+        </p>
+
+        <!-- TIMELINE BAR -->
+        <div
+          class="timeline-wrap"
+          aria-label="Desplegament de dotacions per curs"
+        >
+          <div class="timeline-title">Desplegament previst per cursos</div>
+          <div class="timeline-bars">
+            <div class="t-row">
+              <div class="t-label">2026–27</div>
+              <div class="t-bar-wrap">
+                <div class="t-bar" style="width: 17%" data-val="1.088">
+                  <span class="t-num">1.088</span>
+                </div>
+              </div>
+              <div class="t-pct">17%</div>
+            </div>
+            <div class="t-row">
+              <div class="t-label">2027–28</div>
+              <div class="t-bar-wrap">
+                <div class="t-bar" style="width: 26%" data-val="1.651">
+                  <span class="t-num">1.651</span>
+                </div>
+              </div>
+              <div class="t-pct">26%</div>
+            </div>
+            <div class="t-row">
+              <div class="t-label">2028–29</div>
+              <div class="t-bar-wrap">
+                <div class="t-bar" style="width: 26%" data-val="1.651">
+                  <span class="t-num">1.651</span>
+                </div>
+              </div>
+              <div class="t-pct">26%</div>
+            </div>
+            <div class="t-row">
+              <div class="t-label">2029–30</div>
+              <div class="t-bar-wrap">
+                <div
+                  class="t-bar t-bar-full"
+                  style="width: 31.5%"
+                  data-val="2.023"
+                >
+                  <span class="t-num">2.023</span>
+                </div>
+              </div>
+              <div class="t-pct">31%</div>
+            </div>
+            <div class="t-row t-row-total">
+              <div class="t-label">TOTAL</div>
+              <div class="t-bar-wrap">
+                <div class="t-bar t-bar-total" style="width: 100%">
+                  <span class="t-num">6.413</span>
+                </div>
+              </div>
+              <div class="t-pct">100%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTEXT GRID -->
+        <div class="context-title">
+          Posant les xifres en context (curs 2024-2025)
+        </div>
+        <div class="context-grid">
+          <div class="ctx-card ctx-card-base">
+            <div class="ctx-icon">🏫</div>
+            <div class="ctx-num">~3.400</div>
+            <div class="ctx-label">Centres públics a Catalunya</div>
+            <div class="ctx-sub">Infantil-primària i secundària</div>
+          </div>
+          <div class="ctx-card ctx-card-base">
+            <div class="ctx-icon">👩‍🏫</div>
+            <div class="ctx-num">82.277</div>
+            <div class="ctx-label">Dotacions docents actuals</div>
+            <div class="ctx-sub">
+              Font: Departament d'Educació, setembre 2024
+            </div>
+          </div>
+          <div class="ctx-card ctx-card-base">
+            <div class="ctx-icon">🧑‍🤝‍🧑</div>
+            <div class="ctx-num">3.681</div>
+            <div class="ctx-label">Dotacions PAE actuals</div>
+            <div class="ctx-sub">Personal d'atenció educativa</div>
+          </div>
+          <div class="ctx-card ctx-card-accent">
+            <div class="ctx-icon">➕</div>
+            <div class="ctx-num">6.413</div>
+            <div class="ctx-label">Noves dotacions promeses</div>
+            <div class="ctx-sub">
+              En 4 anys. Sense garantia pressupostària concreta
+            </div>
+          </div>
+          <div class="ctx-card ctx-card-warn">
+            <div class="ctx-icon">📍</div>
+            <div class="ctx-num">~1,9</div>
+            <div class="ctx-label">Dotacions noves per centre</div>
+            <div class="ctx-sub">
+              Si es distribuïssin equitativament entre tots els centres
+            </div>
+          </div>
+          <div class="ctx-card ctx-card-warn">
+            <div class="ctx-icon">📅</div>
+            <div class="ctx-num">272</div>
+            <div class="ctx-label">Dotacions per curs al primer any</div>
+            <div class="ctx-sub">
+              1.088 dotacions ÷ 4 trimestres. Menys d'1 per 10 centres
+            </div>
+          </div>
+        </div>
+
+        <!-- CRITICA -->
+        <div class="dotacio-critica">
+          <div class="critica-num">3 raons per no celebrar la xifra</div>
+          <div class="critica-items">
+            <div class="critica-item">
+              <div class="critica-i-num">01</div>
+              <div class="critica-i-text">
+                <strong>Sense concreció de categories.</strong> L'acord no
+                especifica quantes dotacions seran PAE, quantes docents, quantes
+                vetlladores. Una "dotació" pot ser qualsevol cosa. Sense
+                saber-ho, la xifra és una caixa negra.
+              </div>
+            </div>
+            <div class="critica-item">
+              <div class="critica-i-num">02</div>
+              <div class="critica-i-text">
+                <strong>Sense distribució territorial.</strong> Catalunya és
+                molt desigual: centres urbans saturats, centres rurals amb
+                mancances cròniques. Sense mapa territorial, les dotacions poden
+                concentrar-se on ja hi ha més recursos.
+              </div>
+            </div>
+            <div class="critica-item">
+              <div class="critica-i-num">03</div>
+              <div class="critica-i-text">
+                <strong
+                  >Disponibilitat pressupostària = condicionat al
+                  pressupost.</strong
+                >
+                La frase exacta és clau. Si els pressupostos de la Generalitat
+                no aproven les partides corresponents, les dotacions "previstes"
+                senzillament no es despleguen. No hi ha mecanisme sancionador.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÍNIMS -->
+    <section class="minims" id="minims" aria-labelledby="minims-title">
+      <div class="minims-inner">
+        <h2 id="minims-title">Els mínims<br />innegociables</h2>
+        <div class="minims-grid">
+          <div class="minim-item">
+            <div class="minim-num">01</div>
+            <div class="minim-text">Clàusula IPC vinculant</div>
+            <div class="minim-desc">
+              Sense revisió salarial automàtica lligada a la inflació, qualsevol
+              acord salarial és ficció a mig termini.
+            </div>
+          </div>
+          <div class="minim-item">
+            <div class="minim-num">02</div>
+            <div class="minim-text">Derogació dels decrets conflictius</div>
+            <div class="minim-desc">
+              Si els decrets que van provocar la mobilització segueixen vigents,
+              el conflicte original no s'ha resolt.
+            </div>
+          </div>
+          <div class="minim-item">
+            <div class="minim-num">03</div>
+            <div class="minim-text">
+              Internalització de vetlladores amb termini legal
+            </div>
+            <div class="minim-desc">
+              Un "estudi quan acabi la licitació" sense data ni mecanisme de
+              control no és cap compromís real.
+            </div>
+          </div>
+          <div class="minim-item">
+            <div class="minim-num">04</div>
+            <div class="minim-text">Reducció de ràtios immediata</div>
+            <div class="minim-desc">
+              Les aules estan massificades ara. Una reducció que no s'asssolirà
+              fins al 2031–2032 no resol el problema actual.
+            </div>
+          </div>
+          <div class="minim-item">
+            <div class="minim-num">05</div>
+            <div class="minim-text">
+              Garantia pressupostària de les dotacions
+            </div>
+            <div class="minim-desc">
+              Sense partida específica als pressupostos, les dotacions
+              "previstes" no són drets exigibles.
+            </div>
+          </div>
+          <div class="minim-item">
+            <div class="minim-num">06</div>
+            <div class="minim-text">Autonomia real dels claustres</div>
+            <div class="minim-desc">
+              Sense poder de decisió col·lectiu a les escoles i instituts, la
+              resta de millores és cosmètica.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONCLUSIÓ -->
+    <section class="conclusio" aria-labelledby="conclusio-title">
+      <div class="conclusio-inner">
+        <h2 id="conclusio-title">
+          El conflicte
+          <em>continua obert</em>
+        </h2>
+        <p>
+          L'acord és un primer "sí" de l'administració, dissenyat per ser
+          suficient per aturar la pressió però insuficient per resoldre els
+          problemes reals.
+        </p>
+        <p>
+          El que s'ha aconseguit és fruit de la mobilització, l'organització i
+          la unitat. Precisament per això no podem parar ara. Signar i
+          desmovilitzar en el moment de màxima força seria regalar a
+          l'administració allò que mai no ha estat capaç de guanyar-nos.
+        </p>
+        <span class="final"
+          >La nostra resposta: no és suficient, continuem.</span
+        >
+      </div>
+    </section>
+
+    <footer>
+      <p>
+        Argumentari d'ús lliure per a assemblees, xarxes i espais de debat
+        sindical en l'educació pública catalana.
+      </p>
+    </footer>
+
+    <script>
+      // --- INTERSECTION OBSERVER per a arguments ---
+      const args = document.querySelectorAll(".arg");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              observer.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      args.forEach((a) => observer.observe(a));
+
+      // --- GRÀFIC IPC ---
+      const BASE = 2500;
+      const COMPLEMENT_FINAL = 173.3;
+      const YEARS = [2026, 2027, 2028, 2029, 2030];
+
+      function getComplement(yr) {
+        if (yr <= 2026) return 0;
+        if (yr <= 2027) return COMPLEMENT_FINAL * 0.25;
+        if (yr <= 2028) return COMPLEMENT_FINAL * 0.5;
+        if (yr <= 2029) return COMPLEMENT_FINAL * 0.75;
+        return COMPLEMENT_FINAL;
+      }
+
+      function calcData(ipc) {
+        const withIPC = [],
+          withoutIPC = [],
+          baseLine = [];
+        let baseIPC = BASE;
+        YEARS.forEach((yr, i) => {
+          if (i > 0) baseIPC = baseIPC * (1 + ipc / 100);
+          withIPC.push(Math.round(baseIPC));
+          withoutIPC.push(Math.round(BASE + getComplement(yr)));
+          baseLine.push(BASE);
+        });
+        return { withIPC, withoutIPC, baseLine };
+      }
+
+      let chart;
+      function buildChart(ipc) {
+        const { withIPC, withoutIPC, baseLine } = calcData(ipc);
+        const ctx = document.getElementById("ipc-chart").getContext("2d");
+        if (chart) chart.destroy();
+        chart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: YEARS,
+            datasets: [
+              {
+                label: "Sou just amb IPC",
+                data: withIPC,
+                borderColor: "#1a5fa5",
+                backgroundColor: "rgba(26,95,165,0.06)",
+                borderWidth: 2.5,
+                pointRadius: 5,
+                pointBackgroundColor: "#1a5fa5",
+                fill: false,
+                tension: 0.3,
+              },
+              {
+                label: "Preacord real",
+                data: withoutIPC,
+                borderColor: "#c8001e",
+                backgroundColor: "rgba(200,0,30,0.06)",
+                borderWidth: 2.5,
+                pointRadius: 5,
+                pointBackgroundColor: "#c8001e",
+                fill: false,
+                tension: 0.3,
+              },
+              {
+                label: "Sou base",
+                data: baseLine,
+                borderColor: "#aaa",
+                borderWidth: 1,
+                borderDash: [5, 5],
+                pointRadius: 0,
+                fill: false,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: "#0a0a0a",
+                titleColor: "#f5f2eb",
+                bodyColor: "#d4d0c8",
+                borderColor: "#c8001e",
+                borderWidth: 1,
+                padding: 12,
+                callbacks: {
+                  label: (ctx) =>
+                    " " +
+                    ctx.dataset.label +
+                    ": " +
+                    ctx.raw.toLocaleString("ca") +
+                    " €/mes",
+                },
+              },
+            },
+            scales: {
+              x: {
+                ticks: {
+                  autoSkip: false,
+                  font: { family: "IBM Plex Mono", size: 11 },
+                  color: "#888",
+                },
+                grid: { color: "rgba(0,0,0,0.06)" },
+              },
+              y: {
+                min: 2350,
+                max: 2900,
+                ticks: {
+                  font: { family: "IBM Plex Mono", size: 11 },
+                  color: "#888",
+                  callback: (v) => v.toLocaleString("ca") + " €",
+                },
+                grid: { color: "rgba(0,0,0,0.06)" },
+              },
+            },
+          },
+        });
+      }
+
+      function updateMetrics(ipc) {
+        const { withIPC, withoutIPC } = calcData(ipc);
+        let lost = 0;
+        for (let i = 0; i < YEARS.length; i++) {
+          lost += (withIPC[i] - withoutIPC[i]) * 12;
+        }
+        document.getElementById("perdua-abs").textContent =
+          "−" + Math.round(Math.abs(lost)).toLocaleString("ca") + " €";
+        document.getElementById("poder-real").textContent =
+          withoutIPC[4].toLocaleString("ca") + " €";
+        document.getElementById("poder-ipc").textContent =
+          withIPC[4].toLocaleString("ca") + " €";
+      }
+
+      const slider = document.getElementById("ipc-slider");
+      const ipcOut = document.getElementById("ipc-out");
+
+      function update() {
+        const val = parseFloat(slider.value);
+        ipcOut.textContent = val.toFixed(1).replace(".", ",") + "%";
+        updateMetrics(val);
+        buildChart(val);
+      }
+      slider.addEventListener("input", update);
+      update();
+    </script>
+  </body>
 </html>
