@@ -530,6 +530,177 @@
     text-transform: uppercase;
   }
 
+  /* DOTACIONS */
+  .dotacions-section {
+    background: var(--blanc);
+    padding: 5rem 2rem;
+    border-top: 6px solid var(--negre);
+  }
+  .dotacions-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .dotacions-h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1;
+    color: var(--negre);
+    margin-bottom: 1rem;
+  }
+  .dotacions-h2 em {
+    color: var(--vermell);
+    font-style: normal;
+  }
+  .dotacions-intro {
+    font-size: 1rem;
+    color: var(--gris);
+    max-width: 720px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  /* TIMELINE */
+  .timeline-wrap {
+    background: var(--negre);
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .timeline-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gris-clar);
+    margin-bottom: 1.5rem;
+  }
+  .timeline-bars { display: flex; flex-direction: column; gap: 0.75rem; }
+  .t-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 40px;
+    align-items: center;
+    gap: 1rem;
+  }
+  .t-row-total { margin-top: 0.5rem; border-top: 1px solid #333; padding-top: 0.75rem; }
+  .t-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gris-clar);
+    letter-spacing: 0.05em;
+  }
+  .t-row-total .t-label {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .t-bar-wrap { position: relative; height: 32px; background: #1a1a1a; }
+  .t-bar {
+    height: 100%;
+    background: var(--vermell);
+    display: flex;
+    align-items: center;
+    padding-left: 0.75rem;
+    transition: width 1s ease;
+    position: relative;
+  }
+  .t-bar-total { background: var(--accent); }
+  .t-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--blanc);
+    white-space: nowrap;
+  }
+  .t-bar-total .t-num { color: var(--negre); }
+  .t-pct {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: #666;
+    text-align: right;
+  }
+  .t-row-total .t-pct { color: var(--accent); }
+
+  /* CONTEXT GRID */
+  .context-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gris);
+    margin-bottom: 1rem;
+  }
+  .context-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--gris-clar);
+    margin-bottom: 2.5rem;
+  }
+  .ctx-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .ctx-card-base { background: var(--blanc); }
+  .ctx-card-accent { background: #0a0a0a; }
+  .ctx-card-warn { background: #1a0005; }
+  .ctx-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+  .ctx-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    line-height: 1;
+    color: var(--negre);
+  }
+  .ctx-card-accent .ctx-num { color: var(--accent); }
+  .ctx-card-warn .ctx-num { color: var(--vermell); }
+  .ctx-label {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--negre);
+    line-height: 1.3;
+  }
+  .ctx-card-accent .ctx-label,
+  .ctx-card-warn .ctx-label { color: var(--gris-clar); }
+  .ctx-sub {
+    font-size: 0.72rem;
+    color: var(--gris);
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .ctx-card-accent .ctx-sub,
+  .ctx-card-warn .ctx-sub { color: #666; }
+
+  /* CRÍTICA */
+  .dotacio-critica {
+    border: 2px solid var(--negre);
+    padding: 2rem;
+  }
+  .critica-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--vermell);
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+  }
+  .critica-items { display: flex; flex-direction: column; gap: 1.25rem; }
+  .critica-item {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  .critica-i-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--gris-clar);
+    line-height: 1;
+  }
+  .critica-i-text {
+    font-size: 0.9rem;
+    color: var(--gris);
+    line-height: 1.7;
+  }
+  .critica-i-text strong { color: var(--negre); }
+
   /* RESPONSIVE */
   @media (max-width: 600px) {
     .arg { grid-template-columns: 50px 1fr; gap: 1rem; }
@@ -722,9 +893,139 @@
       </canvas>
     </div>
 
+   <!-- DOTACIONS INFOGRÀFIC -->
     <p class="grafic-nota">
       Salari base de referència: 2.500 €/mes. El complement de 173,30 € es consolida progressivament: 25% el 2027, 50% el 2028, 75% el 2029, 100% el 2030. Sense revisió per IPC, la inflació actua cada any sobre el conjunt del sou.
     </p>
+  </div>
+</section>
+
+ <section class="dotacions-section" id="dotacions" aria-labelledby="dotacions-title">
+  <div class="dotacions-inner">
+
+    <p class="section-label" id="dotacions-title">Les dotacions sota la lupa</p>
+
+    <h2 class="dotacions-h2">6.413 dotacions.<br><em>Per a quants centres?</em></h2>
+    <p class="dotacions-intro">L'acord presenta la xifra de 6.413 noves dotacions com a gran victòria. Per entendre si és gran o petita, cal posar-la en context. Catalunya té aproximadament <strong>3.400 centres públics</strong> d'infantil-primària i secundària. Això vol dir que, al final del desplegament el 2030, la xifra representa menys de 2 dotacions noves per centre, repartides en 4 anys.</p>
+
+    <!-- TIMELINE BAR -->
+    <div class="timeline-wrap" aria-label="Desplegament de dotacions per curs">
+      <div class="timeline-title">Desplegament previst per cursos</div>
+      <div class="timeline-bars">
+        <div class="t-row">
+          <div class="t-label">2026–27</div>
+          <div class="t-bar-wrap">
+            <div class="t-bar" style="width:17%;" data-val="1.088">
+              <span class="t-num">1.088</span>
+            </div>
+          </div>
+          <div class="t-pct">17%</div>
+        </div>
+        <div class="t-row">
+          <div class="t-label">2027–28</div>
+          <div class="t-bar-wrap">
+            <div class="t-bar" style="width:26%;" data-val="1.651">
+              <span class="t-num">1.651</span>
+            </div>
+          </div>
+          <div class="t-pct">26%</div>
+        </div>
+        <div class="t-row">
+          <div class="t-label">2028–29</div>
+          <div class="t-bar-wrap">
+            <div class="t-bar" style="width:26%;" data-val="1.651">
+              <span class="t-num">1.651</span>
+            </div>
+          </div>
+          <div class="t-pct">26%</div>
+        </div>
+        <div class="t-row">
+          <div class="t-label">2029–30</div>
+          <div class="t-bar-wrap">
+            <div class="t-bar t-bar-full" style="width:31.5%;" data-val="2.023">
+              <span class="t-num">2.023</span>
+            </div>
+          </div>
+          <div class="t-pct">31%</div>
+        </div>
+        <div class="t-row t-row-total">
+          <div class="t-label">TOTAL</div>
+          <div class="t-bar-wrap">
+            <div class="t-bar t-bar-total" style="width:100%;">
+              <span class="t-num">6.413</span>
+            </div>
+          </div>
+          <div class="t-pct">100%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTEXT GRID -->
+    <div class="context-title">Posant les xifres en context (curs 2024-2025)</div>
+    <div class="context-grid">
+      <div class="ctx-card ctx-card-base">
+        <div class="ctx-icon">🏫</div>
+        <div class="ctx-num">~3.400</div>
+        <div class="ctx-label">Centres públics a Catalunya</div>
+        <div class="ctx-sub">Infantil-primària i secundària</div>
+      </div>
+      <div class="ctx-card ctx-card-base">
+        <div class="ctx-icon">👩‍🏫</div>
+        <div class="ctx-num">82.277</div>
+        <div class="ctx-label">Dotacions docents actuals</div>
+        <div class="ctx-sub">Font: Departament d'Educació, setembre 2024</div>
+      </div>
+      <div class="ctx-card ctx-card-base">
+        <div class="ctx-icon">🧑‍🤝‍🧑</div>
+        <div class="ctx-num">3.681</div>
+        <div class="ctx-label">Dotacions PAE actuals</div>
+        <div class="ctx-sub">Personal d'atenció educativa</div>
+      </div>
+      <div class="ctx-card ctx-card-accent">
+        <div class="ctx-icon">➕</div>
+        <div class="ctx-num">6.413</div>
+        <div class="ctx-label">Noves dotacions promeses</div>
+        <div class="ctx-sub">En 4 anys. Sense garantia pressupostària concreta</div>
+      </div>
+      <div class="ctx-card ctx-card-warn">
+        <div class="ctx-icon">📍</div>
+        <div class="ctx-num">~1,9</div>
+        <div class="ctx-label">Dotacions noves per centre</div>
+        <div class="ctx-sub">Si es distribuïssin equitativament entre tots els centres</div>
+      </div>
+      <div class="ctx-card ctx-card-warn">
+        <div class="ctx-icon">📅</div>
+        <div class="ctx-num">272</div>
+        <div class="ctx-label">Dotacions per curs al primer any</div>
+        <div class="ctx-sub">1.088 dotacions ÷ 4 trimestres. Menys d'1 per 10 centres</div>
+      </div>
+    </div>
+
+    <!-- CRITICA -->
+    <div class="dotacio-critica">
+      <div class="critica-num">3 raons per no celebrar la xifra</div>
+      <div class="critica-items">
+        <div class="critica-item">
+          <div class="critica-i-num">01</div>
+          <div class="critica-i-text">
+            <strong>Sense concreció de categories.</strong> L'acord no especifica quantes dotacions seran PAE, quantes docents, quantes vetlladores. Una "dotació" pot ser qualsevol cosa. Sense saber-ho, la xifra és una caixa negra.
+          </div>
+        </div>
+        <div class="critica-item">
+          <div class="critica-i-num">02</div>
+          <div class="critica-i-text">
+            <strong>Sense distribució territorial.</strong> Catalunya és molt desigual: centres urbans saturats, centres rurals amb mancances cròniques. Sense mapa territorial, les dotacions poden concentrar-se on ja hi ha més recursos.
+          </div>
+        </div>
+        <div class="critica-item">
+          <div class="critica-i-num">03</div>
+          <div class="critica-i-text">
+            <strong>Disponibilitat pressupostària = condicionat al pressupost.</strong> La frase exacta és clau. Si els pressupostos de la Generalitat no aproven les partides corresponents, les dotacions "previstes" senzillament no es despleguen. No hi ha mecanisme sancionador.
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
